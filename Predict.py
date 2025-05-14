@@ -28,6 +28,8 @@ def Predict(L,rules,hr_t,Rulepath,mode = "Sum"):
                 level_size = len(queue)
                 for _ in range(level_size):
                     current_path = queue.popleft()
+
+
                     current_node = current_path[-1]
                     if (current_node, action) not in hr_t:
                         continue
