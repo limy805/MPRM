@@ -33,7 +33,7 @@ def Predict(L,rules,hr_t,Rulepath,mode = "Sum"):
                         continue
                     childs = hr_t[(current_node, action)]
                     if len(childs) > bet:
-                        successors = sample_entity(childs,bet)
+                        childs = sample_entity(childs,bet)
                     for c in childs:
                         #acycle
                         if c in current_path:
@@ -60,7 +60,7 @@ def Predict(L,rules,hr_t,Rulepath,mode = "Sum"):
                         result[lastent] = tempscore
                 # Sum aggregation
                 else:
-                    result[lastent] += 1 * conf
+                    result[lastent] += prob * conf
         #Calculate MRR and Hit10
         if fact[2] not in result:
             continue
@@ -117,13 +117,13 @@ def Get_rule(dataname,alpha ,beta ,maxrulelen,maxRulenum = 100):
     return Rule
 if __name__ == "__main__":
     random.seed(10)
-    Dataname = "WN18RR"  #6,300,100,300
+    Dataname = "YAGO3-10"  #6,300,100,300
     # Dataname = "NELL-995"  # 3,300,100,300
     # Dataname = "YAGO3-10"  # 3,300,100,300
     # Dataname = "FB15K-237"  # 3,300,200,300
     trainlist, testlist, entity_dict, relation_dict = Getdata(Dataname)
     r_tol = len(relation_dict)
-    T,alp,bet,Rulenum, = 6,300,100,300
+    T,alp,bet,Rulenum, = 3,300,100,300
     Rule = Get_rule(dataname = Dataname,alpha = alp, beta = bet ,maxrulelen = T,maxRulenum=Rulenum)
     trainlist = getnewlist(trainlist)
     testlist = getnewlist(testlist)

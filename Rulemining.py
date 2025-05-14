@@ -8,6 +8,7 @@ import math
 import time
 from contextlib import contextmanager
 import copy
+
 class MPRM():
     def __init__(self,trainlist,enum,rnum,T,maxfact,maxnei=100):
         self.new_train = trainlist
@@ -93,7 +94,7 @@ class MPRM():
         if tup not in self.Rules[relati]:
             self.Rules[relati][tup] = 0
         self.Rules[relati][tup] += 1 / coe
-
+        # self.Rules[relati][tup] += 1 / len(tup)
     def find1path(self,subt):
         for t in subt:
             for r in self.ht_r[t[0]][t[2]]:
@@ -102,6 +103,7 @@ class MPRM():
                         self.Rules[t[1]][(r,)] = 0
                     coe = len(self.hr_t[(t[0],t[1])] & self.hr_t[(t[0],r)])
                     self.Rules[t[1]][(r,)] += 1 / len(self.hr_t[(t[0], r)])*coe
+                    # self.Rules[t[1]][(r,)] += 1
 
         return
     def bidirectional_bfs(self,graph, start):
@@ -206,12 +208,12 @@ def time_block(label):
 
 if __name__ == "__main__":
     random.seed(10)
-    Dataname = "WN18RR"      # 6,300,100
+    Dataname = "YAGO3-10"      # 6,300,100
     # Dataname = "NELL-995"  # 3,300,100
     # Dataname = "YAGO3-10"  # 3,300,100
     # Dataname = "FB15K-237" # 3,300,100
     trainlist, testlist, entity_dict, relation_dict = Getdata(Dataname)
-    M = MPRM(trainlist,len(entity_dict),len(relation_dict),6,300,maxnei=100)
+    M = MPRM(trainlist,len(entity_dict),len(relation_dict),3,300,maxnei=100)
     with time_block("train"):
         M.train()
 
